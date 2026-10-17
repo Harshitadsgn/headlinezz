@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Headline Fetcher</title>
+  <style>
+    :root {
+  --bg: #121212;       /* page background (near black) */
+  --card: #1E1E1E;     /* headline boxes (dark gray) */
+  --text: #F2F2F2;     /* main text */
+  --link: #CFCFCF;     /* links and category tabs (light gray) */
+  --muted: #8C8C8C;    /* dates and small text */
+  --line: #333333;     /* borders */
+}
+
+body {
+  font-family: Georgia, serif;
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 0 16px;
+  background: var(--bg);
+  color: var(--text);
+}
+a { color: var(--link); }
+a:hover { color: #FFFFFF; }
+a.tab { margin-right: 10px; text-decoration: none; }
+a.active { font-weight: bold; text-decoration: underline; color: #FFFFFF; }
+input, button {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--line);
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+button { cursor: pointer; }
+button:hover { background: #2A2A2A; }
+ol { padding-left: 20px; }
+li {
+  margin-bottom: 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 12px 14px;
+  border-radius: 8px;
+}
+small { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <h1>Headline Fetcher</h1>
+
+  <nav>
+    {% for c in categories %}
+      <a class="tab {% if c == current %}active{% endif %}" href="/?cat={{ c }}">{{ c }}</a>
+    {% endfor %}
+  </nav>
+
+  <form method="get">
+    <input type="hidden" name="cat" value="{{ current }}">
+    <input type="text" name="q" value="{{ keyword }}" placeholder="Search keyword">
+    <button type="submit">Search</button>
+  </form>
+
+  <p>{{ headlines|length }} headlines in {{ current }}</p>
+
+  <ol>
+    {% for h in headlines %}
+      <li>
+        <a href="{{ h.link }}" target="_blank">{{ h.title }}</a><br>
+        <small>{{ h.published }}</small>
+        <p>{{ h.summary }}</p>
+      </li>
+    {% else %}
+      <li>No headlines found.</li>
+    {% endfor %}
+  </ol>
+</body>
+</html>
